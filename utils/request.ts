@@ -1,8 +1,6 @@
-import message, { matchMessageMeta } from "@prettylab/db/message/message";
-import { notify } from "@prettylab/notify/notify";
-import messageTranslations from "@/enums/messageTranslations";
 import isClient from "@prettylab/core/utils/ssr/isClient";
 import isServer from "@prettylab/core/utils/ssr/isServer";
+import message, { matchMessageMeta } from "@prettylab/api/consts/message";
 
 export async function GET(url: string) {
   const res = await fetch(url, {
@@ -43,30 +41,45 @@ export async function DELETE(url: string) {
 }
 
 async function handleResponse(res: Response, disableSuccess?: boolean) {
-  const data = await res.json().catch(() => {
-    const { message: translationMessage, variant } =
-      messageTranslations[message.INTERNAL_SERVER_ERROR];
-
+  const data = await res.json().catch(async () => {
     if (isClient()) {
-      notify(translationMessage, { variant });
+      try {
+        // @ts-ignore
+        const { notify } = await import("@prettylab/notify/notify");
+        notify(message.INTERNAL_SERVER_ERROR, {
+          variant:
+            matchMessageMeta[message.INTERNAL_SERVER_ERROR]?.notifyWariant,
+        });
+      } catch {
+        console.error(message.INTERNAL_SERVER_ERROR);
+      }
     }
 
     if (isServer()) {
-      console.log(translationMessage);
+      console.log(message.INTERNAL_SERVER_ERROR);
     }
   });
 
   const isSuccess = matchMessageMeta[data.message]?.success || false;
   if (!disableSuccess || (disableSuccess && !isSuccess)) {
-    const { message: translationMessage, variant } =
-      messageTranslations[data.message];
-
     if (isClient()) {
-      notify(translationMessage, { variant });
+      if (!matchMessageMeta[data.message]?.notifyWariant) {
+        console.log(data.message);
+      }
+
+      try {
+        // @ts-ignore
+        const { notify } = await import("@prettylab/notify/notify");
+        notify(data.message, {
+          variant: matchMessageMeta[data.message],
+        });
+      } catch {
+        console.log(data.message);
+      }
     }
 
     if (isServer()) {
-      console.log(translationMessage);
+      console.log(data.message);
     }
   }
 

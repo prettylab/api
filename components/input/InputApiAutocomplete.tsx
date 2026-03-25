@@ -129,7 +129,6 @@ export default function InputApiAutocomplete({
         ...forceFilters,
       },
       onEnd: () => setLoading(false),
-      disableSuccessMessages: true,
     });
 
     const fetchedData = parseDependency(response, path);
@@ -200,7 +199,7 @@ export default function InputApiAutocomplete({
           selectOnFocus: false,
           clearOnBlur: false,
           handleHomeEndKeys: true,
-          onClose: (event: any, reason) => {
+          onClose: (event: any, reason: any) => {
             const currentLabel = data.find(
               (row: any) => row.id === value,
             )?.label;
