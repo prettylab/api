@@ -75,42 +75,53 @@ export const matchMessageMeta = {
   [message.DELETE_SUCCESS]: {
     code: 200,
     success: true,
+    notifyWariant: "success",
   },
   [message.DELETE_ERROR]: {
     code: 400,
     success: false,
+    notifyWariant: "error",
   },
 
   [message.UNAUTHORIZED]: {
     code: 401,
     success: false,
+    notifyWariant: "error",
   },
 
   [message.NO_TOKEN_PROVIDED]: {
     code: 401,
     success: false,
+    notifyWariant: "warning",
   },
   [message.SESSION_INVALID]: {
     code: 401,
     success: false,
+    notifyWariant: "error",
   },
   [message.SESSION_EXPIRED]: {
     code: 401,
     success: false,
+    notifyWariant: "warning",
   },
 
   [message.INVALID_CREDENTIALS]: {
     code: 401,
     success: false,
+    notifyWariant: "warning",
   },
   [message.LOGIN_SUCCESS]: {
     code: 200,
     success: true,
+    notifyWariant: "success",
   },
   [message.LOGOUT_SUCCESS]: {
     code: 200,
     success: true,
+    notifyWariant: "success",
   },
+
+  ...(config.api?.matchMessageMeta || {}),
 };
 
 export default message;
