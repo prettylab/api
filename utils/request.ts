@@ -1,4 +1,4 @@
-import message, { matchMessageMeta } from "@prettylab/prisma/message/message";
+import message, { matchMessageMeta } from "@prettylab/db/message/message";
 import { notify } from "@prettylab/notify/notify";
 import messageTranslations from "@/enums/messageTranslations";
 import isClient from "@prettylab/core/utils/ssr/isClient";
